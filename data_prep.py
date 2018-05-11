@@ -60,7 +60,7 @@ def gen_label_vectors():
 
 
 def gen_training_data(test_size=0.2):
-    """This method returns two tuples : (X_train, y_train), (X_test, y_test)
+    """This method returns two tuples : (X_train, y_train), (X_test, y_test) and the number of examples
         It requires a test_size to use when splitting the data-set into test and training sets"""
     data = prepare_data()
     labels, labels_to_array = gen_label_vectors()
@@ -80,4 +80,4 @@ def gen_training_data(test_size=0.2):
 
     return (X_train, y_train), (X_test, y_test)
 
-
+# TODO: Create more data by using transformations
