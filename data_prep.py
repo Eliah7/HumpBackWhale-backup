@@ -85,5 +85,5 @@ def gen_training_data(test_size=0.2):
 
 # TODO: Create more data by using transformations
 # TODO: use os functions instead of hardcoding the directory urls
-(X_train, y_train), (X_test, y_test) = gen_training_data()
+
 

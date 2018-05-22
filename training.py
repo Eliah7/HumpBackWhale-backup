@@ -8,6 +8,8 @@ NB_CLASSES = 4251
 
 # data
 (X_train, y_train), (X_test, y_test) = dp.gen_training_data()
+# X_train /= 255   # normalization
+# X_test /= 255
 
 # training
 model = CNN.build(NB_CLASSES, c.IMG_ROWS, c.IMG_COLS, c.IMG_CHANNELS)
