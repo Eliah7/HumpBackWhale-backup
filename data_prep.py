@@ -3,15 +3,13 @@ import os
 import numpy as np
 import cv2
 import pandas as pd
+import constants as c
 from sklearn.model_selection import train_test_split
 
 # constants
 DATA_DIR = 'Data'
 DATA_DIR_TEST = DATA_DIR + '/test'
 DATA_DIR_TRAINING = DATA_DIR + '/train'
-IMG_ROWS = 1613
-IMG_COLS = 1050
-IMG_CHANNELS = 3
 
 
 def prepare_data(kind=0):
@@ -25,14 +23,14 @@ def prepare_data(kind=0):
                 if each_file == each_index:
                     index = train_index.loc[each_index].Id
                     image = cv2.imread(DATA_DIR_TRAINING + '/training_images/' + each_file)
-                    data[index] = np.array(cv2.resize(image, (IMG_ROWS, IMG_COLS)))
+                    data[index] = np.array(cv2.resize(image, (c.IMG_ROWS, c.IMG_COLS)))
         return data
 
     elif kind == 1:
         """returns a dictionary of image_name: image_array"""
         for each_file in os.listdir(DATA_DIR_TEST + '/test_images'):
             image = cv2.imread(DATA_DIR_TEST + '/test_images/' + each_file)
-            data[each_file] = np.array(cv2.resize(image, (IMG_ROWS, IMG_COLS)))
+            data[each_file] = np.array(cv2.resize(image, (c.IMG_ROWS, c.IMG_COLS)))
         return data
 
     else:
@@ -65,15 +63,20 @@ def gen_training_data(test_size=0.2):
     data = prepare_data()
     labels, labels_to_array = gen_label_vectors()
 
-    x_data = [] # store the images
-    for _, x in data.items():
-        x_data.append(x)
+    x_data = np.zeros((len(data.items()), ), dtype=list) # store the images
+    # i = 0
+    # for _, x in data.items():
+    #     x_data[i] = x
+    #     i += 1
+    print(data.items())
 
-    one_hot_labels = []
+    one_hot_labels = np.zeros((len(data.keys()), ), dtype=list)
+    j = 0
     for key in data.keys():
         for label, vec_label in labels_to_array.items():
             if key == label:
-                one_hot_labels.append(vec_label)
+                one_hot_labels[j] = vec_label
+                j += 1
 
     X_train, X_test = train_test_split(x_data, test_size=test_size)
     y_train, y_test = train_test_split(one_hot_labels, test_size=test_size)
@@ -81,3 +84,7 @@ def gen_training_data(test_size=0.2):
     return (X_train, y_train), (X_test, y_test)
 
 # TODO: Create more data by using transformations
+# TODO: Use numpy arrays instead of lists
+# TODO: use os functions instead of hardcoding the directory urls
+(X_train, y_train), (X_test, y_test) =  gen_training_data()
+print(len(X_test))

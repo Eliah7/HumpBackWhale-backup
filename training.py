@@ -1,16 +1,19 @@
 # imports
 from network import CNN
 import data_prep as dp
+import constants as c
 
 # constants
-IMG_ROWS = 1613
-IMG_COLS = 1050
-IMG_CHANNELS = 3
 NB_CLASSES = 4251
 
+# data
+(X_train, y_train), (X_test, y_test) = dp.gen_training_data()
 
-model = CNN.build(NB_CLASSES, IMG_ROWS, IMG_COLS, IMG_CHANNELS)
+# training
+model = CNN.build(NB_CLASSES, c.IMG_ROWS, c.IMG_COLS, c.IMG_CHANNELS)
 
+# TODO: Actually do the training
+# TODO: Save the model in a h5 file
 # TODO: train the tensorFlow model too
 
 
