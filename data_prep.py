@@ -15,22 +15,23 @@ DATA_DIR_TRAINING = DATA_DIR + '/train'
 def prepare_data(kind=0):
     train_index = pd.read_csv(DATA_DIR_TRAINING + '/train.csv').set_index('Image')
 
-    data = {}
+    data = []
     if kind == 0:
-        """returns a dictionary of label: image_array"""
+        """returns a list of tuples (label, image_array)"""
+        
         for each_file in os.listdir(DATA_DIR_TRAINING + '/training_images'):
-            for each_index in train_index.index:
-                if each_file == each_index:
-                    index = train_index.loc[each_index].Id
-                    image = cv2.imread(DATA_DIR_TRAINING + '/training_images/' + each_file)
-                    data[index] = np.array(cv2.resize(image, (c.IMG_ROWS, c.IMG_COLS)))
+            index = train_index.loc[each_file].Id
+            image = np.array(cv2.imread(DATA_DIR_TRAINING + '/training_images/' + each_file))
+            my_tup = (index, image)
+            data.append(my_tup)
+
         return data
 
     elif kind == 1:
         """returns a dictionary of image_name: image_array"""
         for each_file in os.listdir(DATA_DIR_TEST + '/test_images'):
             image = cv2.imread(DATA_DIR_TEST + '/test_images/' + each_file)
-            data[each_file] = np.array(cv2.resize(image, (c.IMG_ROWS, c.IMG_COLS)))
+            data.append(np.array(cv2.resize(image, (c.IMG_ROWS, c.IMG_COLS))))
         return data
 
     else:
@@ -63,18 +64,17 @@ def gen_training_data(test_size=0.2):
     data = prepare_data()
     labels, labels_to_array = gen_label_vectors()
 
-    x_data = np.zeros((len(data.items()), ), dtype=list) # store the images
-    # i = 0
-    # for _, x in data.items():
-    #     x_data[i] = x
-    #     i += 1
-    print(data.items())
+    x_data = np.zeros((len(data), ), dtype=list) # store the images
+    i = 0
+    for index, image in data:
+        x_data[i] = image
+        i += 1
 
-    one_hot_labels = np.zeros((len(data.keys()), ), dtype=list)
+    one_hot_labels = np.zeros((len(data), ), dtype=list)
     j = 0
-    for key in data.keys():
+    for index, image in data:
         for label, vec_label in labels_to_array.items():
-            if key == label:
+            if index == label:
                 one_hot_labels[j] = vec_label
                 j += 1
 
@@ -84,7 +84,6 @@ def gen_training_data(test_size=0.2):
     return (X_train, y_train), (X_test, y_test)
 
 # TODO: Create more data by using transformations
-# TODO: Use numpy arrays instead of lists
 # TODO: use os functions instead of hardcoding the directory urls
-(X_train, y_train), (X_test, y_test) =  gen_training_data()
-print(len(X_test))
+(X_train, y_train), (X_test, y_test) = gen_training_data()
+

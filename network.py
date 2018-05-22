@@ -21,4 +21,3 @@ class CNN:
         model.add(Dense(nb_classes, activation='softmax'))
         return model
 
-# TODO: Implement a tensorFlow CNN

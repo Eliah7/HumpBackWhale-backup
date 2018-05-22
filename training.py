@@ -12,9 +12,10 @@ NB_CLASSES = 4251
 # training
 model = CNN.build(NB_CLASSES, c.IMG_ROWS, c.IMG_COLS, c.IMG_CHANNELS)
 
+
 # TODO: Actually do the training
 # TODO: Save the model in a h5 file
-# TODO: train the tensorFlow model too
+
 
 
 
