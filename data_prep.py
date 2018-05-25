@@ -21,7 +21,8 @@ def prepare_data(kind=0):
         
         for each_file in os.listdir(DATA_DIR_TRAINING + '/training_images'):
             index = train_index.loc[each_file].Id
-            image = np.array(cv2.imread(DATA_DIR_TRAINING + '/training_images/' + each_file))
+            image = cv2.imread(DATA_DIR_TRAINING + '/training_images/' + each_file)
+            image = np.array(cv2.resize(image, (c.IMG_ROWS, c.IMG_COLS)))
             my_tup = (index, image)
             data.append(my_tup)
 
@@ -64,7 +65,7 @@ def gen_training_data(test_size=0.2):
     data = prepare_data()
     labels, labels_to_array = gen_label_vectors()
 
-    x_data = np.zeros((len(data), ), dtype=list) # store the images
+    x_data = np.zeros((len(data),) ,dtype=list) # store the images
     i = 0
     for index, image in data:
         x_data[i] = image
@@ -85,5 +86,6 @@ def gen_training_data(test_size=0.2):
 
 # TODO: Create more data by using transformations
 # TODO: use os functions instead of hardcoding the directory urls
+(X_train, y_train), (X_test, y_test) = gen_training_data()
 
 
